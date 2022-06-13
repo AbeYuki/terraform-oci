@@ -22,14 +22,15 @@ resource "oci_core_instance" "kubernetes" {
     source_type = "image"
   }
   metadata = {
-    ssh_authorized_keys = "${var.SSH_PUBLIC_KEY}"
+    ssh_authorized_keys = "${file(var.SSH_PUBLIC_KEY_PATH)}"
+    user_data           = "${base64encode(file("./userdata/cloud-init-ubuntu.yaml"))}"
   }
   provisioner "remote-exec" {
     connection {
       type        = "ssh"
       user        = "ubuntu"
       host        = self.public_ip
-      private_key = "var.PRIVATE_KEY_INSTANCE"
+      private_key = "${file(var.PRIVATE_KEY_INSTANCE_PATH)}"
     }
     scripts = [
       "provisioning/provisioning.sh",

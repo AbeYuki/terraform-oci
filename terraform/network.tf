@@ -42,16 +42,6 @@ resource "oci_core_security_list" "sl01" {
     source      = "0.0.0.0/0"
     protocol    = "6"
     stateless   = false
-    description = "kubernetes api server"
-    tcp_options {
-      min = "6443"
-      max = "6443"
-    }
-  }
-  ingress_security_rules {
-    source      = "0.0.0.0/0"
-    protocol    = "6"
-    stateless   = false
     description = "etcd"
     tcp_options {
       min = "2376"
@@ -106,6 +96,56 @@ resource "oci_core_security_list" "sl01" {
     tcp_options {
       min = "10254"
       max = "10254"
+    }
+  }
+  ingress_security_rules {
+    source      = "0.0.0.0/0"
+    protocol    = "6"
+    stateless   = false
+    description = "microk8s-kube-controller"
+    tcp_options {
+      min = "10257"
+      max = "10257"
+    }
+  }
+  ingress_security_rules {
+    source      = "0.0.0.0/0"
+    protocol    = "6"
+    stateless   = false
+    description = "microk8s-kube-scheduler"
+    tcp_options {
+      min = "10257"
+      max = "10257"
+    }
+  }
+  ingress_security_rules {
+    source      = "0.0.0.0/0"
+    protocol    = "6"
+    stateless   = false
+    description = "microk8s-api-server"
+    tcp_options {
+      min = "16443"
+      max = "16443"
+    }
+  }
+  ingress_security_rules {
+    source      = "0.0.0.0/0"
+    protocol    = "6"
+    stateless   = false
+    description = "microk8s-dqlite"
+    tcp_options {
+      min = "19001"
+      max = "19001"
+    }
+  }
+  ingress_security_rules {
+    source      = "0.0.0.0/0"
+    protocol    = "6"
+    stateless   = false
+    description = "microk8s-cluster-agent"
+    tcp_options {
+      min = "25000"
+      max = "25000"
     }
   }
   ingress_security_rules {

@@ -26,3 +26,6 @@ variable "CIDR_SUBNET01" {
 variable "CIDR_SUBNET02" {
   default = "192.168.1.0/24"
 }
+variable "OS_USER" {
+  default = "ubuntu"
+}

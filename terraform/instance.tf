@@ -23,14 +23,18 @@ resource "oci_core_instance" "kubernetes" {
   }
   metadata = {
     ssh_authorized_keys = "${file(var.SSH_PUBLIC_KEY_PATH)}"
-    user_data           = "${base64encode(file("./userdata/cloud-init-ubuntu.yaml"))}"
+    user_data           = "${base64encode(data.template_file.CLOUD_CONFIG.rendered)}"
+  }
+  timeouts {
+    create = "60m"
   }
   provisioner "remote-exec" {
     connection {
       type        = "ssh"
-      user        = "ubuntu"
+      user        = var.OS_USER
       host        = self.public_ip
-      private_key = "${file(var.PRIVATE_KEY_INSTANCE_PATH)}"
+      private_key = file(var.PRIVATE_KEY_INSTANCE_PATH)
+      timeout     = "5m"
     }
     scripts = [
       "provisioning/provisioning.sh",

@@ -2,6 +2,10 @@
 Build OCI with terraform
 
 
+## terraform ディレクトリへ移動
+```
+cd terraform/
+```
 ## 値を入力し環境変数を設定する
 ```bash
 cat <<'EOF'> .env && source .env
@@ -13,4 +17,19 @@ export TF_VAR_PRIVATE_KEY_INSTANCE_PATH=" "
 export TF_VAR_SSH_PUBLIC_KEY_PATH=" "
 export TF_VAR_API_KEY_PATH=" "
 EOF
+```
+
+## 初期化
+```bash
+terraform init
+```
+
+## 定義内容・変更内容の確認
+```bash
+terraform plan
+```
+
+## planの内容を実行
+```bash
+terraform apply
 ```

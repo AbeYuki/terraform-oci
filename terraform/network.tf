@@ -39,7 +39,7 @@ resource "oci_core_security_list" "sl01" {
     }
   }
   ingress_security_rules {
-    source      = "0.0.0.0/0"
+    source      = "192.168.0.0/16"
     protocol    = "6"
     stateless   = false
     description = "etcd"
@@ -49,7 +49,7 @@ resource "oci_core_security_list" "sl01" {
     }
   }
   ingress_security_rules {
-    source      = "0.0.0.0/0"
+    source      = "192.168.0.0/16"
     protocol    = "6"
     stateless   = false
     description = "etcd"
@@ -59,7 +59,7 @@ resource "oci_core_security_list" "sl01" {
     }
   }
   ingress_security_rules {
-    source      = "0.0.0.0/0"
+    source      = "192.168.0.0/16"
     protocol    = "17"
     stateless   = false
     description = "Kubernetes UDP"
@@ -69,7 +69,7 @@ resource "oci_core_security_list" "sl01" {
     }
   }
   ingress_security_rules {
-    source      = "0.0.0.0/0"
+    source      = "192.168.0.0/16"
     protocol    = "6"
     stateless   = false
     description = "controlplane"
@@ -79,7 +79,7 @@ resource "oci_core_security_list" "sl01" {
     }
   }
   ingress_security_rules {
-    source      = "0.0.0.0/0"
+    source      = "192.168.0.0/16"
     protocol    = "6"
     stateless   = false
     description = "etcd"
@@ -89,7 +89,7 @@ resource "oci_core_security_list" "sl01" {
     }
   }
   ingress_security_rules {
-    source      = "0.0.0.0/0"
+    source      = "192.168.0.0/16"
     protocol    = "6"
     stateless   = false
     description = "controlplane"
@@ -99,7 +99,7 @@ resource "oci_core_security_list" "sl01" {
     }
   }
   ingress_security_rules {
-    source      = "0.0.0.0/0"
+    source      = "192.168.0.0/16"
     protocol    = "6"
     stateless   = false
     description = "microk8s-kube-controller"
@@ -109,7 +109,7 @@ resource "oci_core_security_list" "sl01" {
     }
   }
   ingress_security_rules {
-    source      = "0.0.0.0/0"
+    source      = "192.168.0.0/16"
     protocol    = "6"
     stateless   = false
     description = "microk8s-kube-scheduler"
@@ -119,7 +119,7 @@ resource "oci_core_security_list" "sl01" {
     }
   }
   ingress_security_rules {
-    source      = "0.0.0.0/0"
+    source      = "192.168.0.0/16"
     protocol    = "6"
     stateless   = false
     description = "microk8s-api-server"
@@ -129,7 +129,7 @@ resource "oci_core_security_list" "sl01" {
     }
   }
   ingress_security_rules {
-    source      = "0.0.0.0/0"
+    source      = "192.168.0.0/16"
     protocol    = "6"
     stateless   = false
     description = "microk8s-dqlite"
@@ -139,7 +139,7 @@ resource "oci_core_security_list" "sl01" {
     }
   }
   ingress_security_rules {
-    source      = "0.0.0.0/0"
+    source      = "192.168.0.0/16"
     protocol    = "6"
     stateless   = false
     description = "microk8s-cluster-agent"
@@ -149,7 +149,7 @@ resource "oci_core_security_list" "sl01" {
     }
   }
   ingress_security_rules {
-    source      = "0.0.0.0/0"
+    source      = "192.168.0.0/16"
     protocol    = "6"
     stateless   = false
     description = "nodeport(TCP)"
@@ -159,7 +159,7 @@ resource "oci_core_security_list" "sl01" {
     }
   }
   ingress_security_rules {
-    source      = "0.0.0.0/0"
+    source      = "192.168.0.0/16"
     protocol    = "17"
     stateless   = false
     description = "nodeport(UDP)"

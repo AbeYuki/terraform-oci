@@ -18,13 +18,19 @@ variable "VOLUME_ATTACHMENT_ATTACHMENT_TYPE" {
   default = "paravirtualized"
 }
 variable "CIDR_VCN01" {
-  default = "192.168.0.0/16"
+  default = "10.0.0.0/16"
 }
 variable "CIDR_SUBNET01" {
-  default = "192.168.0.0/24"
+  default = "10.0.0.0/24"
 }
 variable "CIDR_SUBNET02" {
-  default = "192.168.1.0/24"
+  default = "10.0.1.0/24"
+}
+variable "CIDR_VCN02" {
+  default = "192.168.0.0/16"
+}
+variable "CIDR_SUBNET03" {
+  default = "192.168.0.0/24"
 }
 variable "OS_USER" {
   default = "ubuntu"

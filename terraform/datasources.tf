@@ -1,4 +1,4 @@
-data "oci_identity_availability_domains" "ads" {
+data "oci_identity_availability_domains" "ADS" {
   compartment_id = var.COMPARTMENT_OCID
 }
 

@@ -1,190 +1,105 @@
-resource "oci_core_virtual_network" "vcn01" {
+# vcn 01
+## Kubernetes node
+resource "oci_core_virtual_network" "VCN01" {
   cidr_block     = var.CIDR_VCN01
   compartment_id = var.COMPARTMENT_OCID
   display_name   = "vcn01"
   dns_label      = "vcn01"
 }
-
-resource "oci_core_internet_gateway" "ig01" {
+## Operation node
+resource "oci_core_virtual_network" "VCN02" {
+  cidr_block     = var.CIDR_VCN02
   compartment_id = var.COMPARTMENT_OCID
-  display_name   = "ig01"
-  vcn_id         = oci_core_virtual_network.vcn01.id
+  display_name   = "vcn02"
+  dns_label      = "vcn02"
 }
 
-resource "oci_core_route_table" "rt01" {
+# subnet
+## public
+resource "oci_core_subnet" "SUBNET01" {
+  availability_domain = lookup(data.oci_identity_availability_domains.ADS.availability_domains[0], "name")
+  cidr_block          = var.CIDR_SUBNET01
+  display_name        = "subnet01"
+  security_list_ids   = [oci_core_security_list.SL01.id]
+  compartment_id      = var.COMPARTMENT_OCID
+  vcn_id              = oci_core_virtual_network.VCN01.id
+  route_table_id      = oci_core_route_table.RT01.id
+}
+
+## private
+resource "oci_core_subnet" "SUBNET02" {
+  availability_domain        = lookup(data.oci_identity_availability_domains.ADS.availability_domains[0], "name")
+  cidr_block                 = var.CIDR_SUBNET02
+  display_name               = "subnet02"
+  security_list_ids          = [oci_core_security_list.SL02.id]
+  compartment_id             = var.COMPARTMENT_OCID
+  vcn_id                     = oci_core_virtual_network.VCN01.id
+  route_table_id             = oci_core_route_table.RT02.id
+  prohibit_public_ip_on_vnic = true
+}
+
+## public
+resource "oci_core_subnet" "SUBNET03" {
+  availability_domain = lookup(data.oci_identity_availability_domains.ADS.availability_domains[0], "name")
+  cidr_block          = var.CIDR_SUBNET03
+  display_name        = "subnet03"
+  dns_label           = "public"
+  security_list_ids   = [oci_core_security_list.SL03.id]
+  compartment_id      = var.COMPARTMENT_OCID
+  vcn_id              = oci_core_virtual_network.VCN02.id
+  route_table_id      = oci_core_route_table.RT03.id
+}
+
+# gatway
+## internet-gateway
+resource "oci_core_internet_gateway" "IG01" {
   compartment_id = var.COMPARTMENT_OCID
-  vcn_id         = oci_core_virtual_network.vcn01.id
+  display_name   = "ig01"
+  vcn_id         = oci_core_virtual_network.VCN01.id
+}
+resource "oci_core_internet_gateway" "IG02" {
+  compartment_id = var.COMPARTMENT_OCID
+  display_name   = "ig02"
+  vcn_id         = oci_core_virtual_network.VCN02.id
+}
+## nat-gateway
+resource "oci_core_nat_gateway" "NG01" {
+  display_name   = "ng01"
+  compartment_id = var.COMPARTMENT_OCID
+  vcn_id         = oci_core_virtual_network.VCN01.id
+}
+
+# route-table
+## public
+resource "oci_core_route_table" "RT01" {
+  compartment_id = var.COMPARTMENT_OCID
+  vcn_id         = oci_core_virtual_network.VCN01.id
   display_name   = "rt01"
   route_rules {
     destination       = "0.0.0.0/0"
-    network_entity_id = oci_core_internet_gateway.ig01.id
+    network_entity_id = oci_core_internet_gateway.IG01.id
   }
 }
-resource "oci_core_security_list" "sl01" {
+## private
+resource "oci_core_route_table" "RT02" {
   compartment_id = var.COMPARTMENT_OCID
-  egress_security_rules {
-    destination = "0.0.0.0/0"
-    protocol    = "all"
-    stateless   = false
-    description = "all"
+  vcn_id         = oci_core_virtual_network.VCN01.id
+  display_name   = "rt02"
+  route_rules {
+    destination       = "0.0.0.0/0"
+    network_entity_id = oci_core_nat_gateway.NG01.id
   }
-  ingress_security_rules {
-    source      = "0.0.0.0/0"
-    protocol    = "6"
-    stateless   = false
-    description = "ssh"
-    tcp_options {
-      min = "22"
-      max = "22"
-    }
-  }
-  ingress_security_rules {
-    source      = "192.168.0.0/16"
-    protocol    = "6"
-    stateless   = false
-    description = "etcd"
-    tcp_options {
-      min = "2376"
-      max = "2376"
-    }
-  }
-  ingress_security_rules {
-    source      = "192.168.0.0/16"
-    protocol    = "6"
-    stateless   = false
-    description = "etcd"
-    tcp_options {
-      min = "2379"
-      max = "2380"
-    }
-  }
-  ingress_security_rules {
-    source      = "192.168.0.0/16"
-    protocol    = "17"
-    stateless   = false
-    description = "Kubernetes UDP"
-    udp_options {
-      min = "8472"
-      max = "8472"
-    }
-  }
-  ingress_security_rules {
-    source      = "192.168.0.0/16"
-    protocol    = "6"
-    stateless   = false
-    description = "controlplane"
-    tcp_options {
-      min = "9099"
-      max = "9099"
-    }
-  }
-  ingress_security_rules {
-    source      = "192.168.0.0/16"
-    protocol    = "6"
-    stateless   = false
-    description = "etcd"
-    tcp_options {
-      min = "10250"
-      max = "10250"
-    }
-  }
-  ingress_security_rules {
-    source      = "192.168.0.0/16"
-    protocol    = "6"
-    stateless   = false
-    description = "controlplane"
-    tcp_options {
-      min = "10254"
-      max = "10254"
-    }
-  }
-  ingress_security_rules {
-    source      = "192.168.0.0/16"
-    protocol    = "6"
-    stateless   = false
-    description = "microk8s-kube-controller"
-    tcp_options {
-      min = "10257"
-      max = "10257"
-    }
-  }
-  ingress_security_rules {
-    source      = "192.168.0.0/16"
-    protocol    = "6"
-    stateless   = false
-    description = "microk8s-kube-scheduler"
-    tcp_options {
-      min = "10257"
-      max = "10257"
-    }
-  }
-  ingress_security_rules {
-    source      = "192.168.0.0/16"
-    protocol    = "6"
-    stateless   = false
-    description = "microk8s-api-server"
-    tcp_options {
-      min = "16443"
-      max = "16443"
-    }
-  }
-  ingress_security_rules {
-    source      = "192.168.0.0/16"
-    protocol    = "6"
-    stateless   = false
-    description = "microk8s-dqlite"
-    tcp_options {
-      min = "19001"
-      max = "19001"
-    }
-  }
-  ingress_security_rules {
-    source      = "192.168.0.0/16"
-    protocol    = "6"
-    stateless   = false
-    description = "microk8s-cluster-agent"
-    tcp_options {
-      min = "25000"
-      max = "25000"
-    }
-  }
-  ingress_security_rules {
-    source      = "192.168.0.0/16"
-    protocol    = "6"
-    stateless   = false
-    description = "nodeport(TCP)"
-    tcp_options {
-      min = "30000"
-      max = "32767"
-    }
-  }
-  ingress_security_rules {
-    source      = "192.168.0.0/16"
-    protocol    = "17"
-    stateless   = false
-    description = "nodeport(UDP)"
-    udp_options {
-      min = "30000"
-      max = "32767"
-    }
-  }
-  ingress_security_rules {
-    source      = var.CIDR_VCN01
-    protocol    = "all"
-    stateless   = false
-    description = "all vcn01"
-  }
-  vcn_id       = oci_core_virtual_network.vcn01.id
-  display_name = "sl01"
 }
-resource "oci_core_subnet" "subnet01" {
-  availability_domain        = lookup(data.oci_identity_availability_domains.ads.availability_domains[0], "name")
-  cidr_block                 = var.CIDR_SUBNET01
-  display_name               = "subnet01"
-  dns_label                  = "public"
-  security_list_ids          = [oci_core_security_list.sl01.id]
-  compartment_id             = var.COMPARTMENT_OCID
-  vcn_id                     = oci_core_virtual_network.vcn01.id
-  route_table_id             = oci_core_route_table.rt01.id
-  prohibit_public_ip_on_vnic = false
+## public
+resource "oci_core_route_table" "RT03" {
+  compartment_id = var.COMPARTMENT_OCID
+  vcn_id         = oci_core_virtual_network.VCN02.id
+  display_name   = "rt03"
+  route_rules {
+    destination       = "0.0.0.0/0"
+    network_entity_id = oci_core_internet_gateway.IG02.id
+  }
 }
+
+
+

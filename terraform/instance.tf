@@ -1,6 +1,6 @@
-resource "oci_core_instance" "kubernetes" {
+resource "oci_core_instance" "K8S" {
   count               = 4
-  availability_domain = oci_core_subnet.subnet01.availability_domain
+  availability_domain = oci_core_subnet.SUBNET01.availability_domain
   compartment_id      = var.COMPARTMENT_OCID
   shape               = "VM.Standard.A1.Flex"
   display_name        = "ubuntu0${count.index + 1}"
@@ -11,11 +11,11 @@ resource "oci_core_instance" "kubernetes" {
   }
 
   create_vnic_details {
-    subnet_id              = oci_core_subnet.subnet01.id
+    subnet_id              = oci_core_subnet.SUBNET01.id
     display_name           = "ubuntu0${count.index + 1}-vnic0${count.index + 1}"
     assign_public_ip       = true
     skip_source_dest_check = true
-    hostname_label         = "ubuntu0${count.index + 1}"
+    #hostname_label         = "ubuntu0${count.index + 1}"
   }
   source_details {
     source_id   = var.INSTANCE_SOURCE_OCID
@@ -43,11 +43,11 @@ resource "oci_core_instance" "kubernetes" {
 }
 
 output "public_ips" {
-  value       = oci_core_instance.kubernetes.*.public_ip
+  value       = oci_core_instance.K8S.*.public_ip
   description = "Public IPs of instances"
 }
 
 output "private_ips" {
-  value       = oci_core_instance.kubernetes.*.private_ip
+  value       = oci_core_instance.K8S.*.private_ip
   description = "Private IPs of instances"
 }

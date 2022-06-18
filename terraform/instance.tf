@@ -3,7 +3,7 @@ resource "oci_core_instance" "K8S" {
   availability_domain = oci_core_subnet.SUBNET01.availability_domain
   compartment_id      = var.COMPARTMENT_OCID
   shape               = "VM.Standard.A1.Flex"
-  display_name        = "ubuntu0${count.index + 1}"
+  display_name        = "node0${count.index + 1}"
 
   shape_config {
     ocpus         = 1
@@ -11,11 +11,11 @@ resource "oci_core_instance" "K8S" {
   }
 
   create_vnic_details {
-    subnet_id              = oci_core_subnet.SUBNET01.id
-    display_name           = "ubuntu0${count.index + 1}-vnic0${count.index + 1}"
-    assign_public_ip       = true
-    skip_source_dest_check = true
-    #hostname_label         = "ubuntu0${count.index + 1}"
+    subnet_id = oci_core_subnet.SUBNET01.id
+    assign_public_ip          = true
+    skip_source_dest_check    = true
+    assign_private_dns_record = true
+   # hostname_label            = "node0${count.index + 1}"
   }
   source_details {
     source_id   = var.INSTANCE_SOURCE_OCID

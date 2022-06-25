@@ -10,7 +10,33 @@ resource "oci_core_security_list" "SL01" {
     description = "all"
   }
   ingress_security_rules {
-    source      = "0.0.0.0/0"
+    source      = "${var.MY_GLOBAL_IP}/32"
+    protocol    = "6"
+    stateless   = false
+    description = "NodePort"
+    tcp_options {
+      min = "30000"
+      max = "32767"
+    }
+  }
+  ingress_security_rules {
+    source   = "${var.CIDR_VCN01}"
+    protocol = "6"
+    tcp_options {
+      min = "53"
+      max = "53"
+    }
+  }
+  ingress_security_rules {
+    source   = "${var.CIDR_VCN01}"
+    protocol = "17"
+    udp_options {
+      min = "53"
+      max = "53"
+    }
+  }
+  ingress_security_rules {
+    source      = "${var.MY_GLOBAL_IP}/32"
     protocol    = "6"
     stateless   = false
     description = "ssh"
@@ -20,7 +46,7 @@ resource "oci_core_security_list" "SL01" {
     }
   }
   ingress_security_rules {
-    source      = "10.0.0.0/16"
+    source      = "${var.CIDR_VCN01}"
     protocol    = "6"
     stateless   = false
     description = "etcd"
@@ -30,7 +56,7 @@ resource "oci_core_security_list" "SL01" {
     }
   }
   ingress_security_rules {
-    source      = "10.0.0.0/16"
+    source      = "${var.CIDR_VCN01}"
     protocol    = "6"
     stateless   = false
     description = "etcd"
@@ -40,7 +66,7 @@ resource "oci_core_security_list" "SL01" {
     }
   }
   ingress_security_rules {
-    source      = "10.0.0.0/16"
+    source      = "${var.CIDR_VCN01}"
     protocol    = "17"
     stateless   = false
     description = "Kubernetes UDP"
@@ -50,7 +76,7 @@ resource "oci_core_security_list" "SL01" {
     }
   }
   ingress_security_rules {
-    source      = "10.0.0.0/16"
+    source      = "${var.CIDR_VCN01}"
     protocol    = "6"
     stateless   = false
     description = "controlplane"
@@ -60,7 +86,7 @@ resource "oci_core_security_list" "SL01" {
     }
   }
   ingress_security_rules {
-    source      = "10.0.0.0/16"
+    source      = "${var.CIDR_VCN01}"
     protocol    = "6"
     stateless   = false
     description = "etcd"
@@ -70,7 +96,7 @@ resource "oci_core_security_list" "SL01" {
     }
   }
   ingress_security_rules {
-    source      = "10.0.0.0/16"
+    source      = "${var.CIDR_VCN01}"
     protocol    = "6"
     stateless   = false
     description = "controlplane"
@@ -80,7 +106,7 @@ resource "oci_core_security_list" "SL01" {
     }
   }
   ingress_security_rules {
-    source      = "10.0.0.0/16"
+    source      = "${var.CIDR_VCN01}"
     protocol    = "6"
     stateless   = false
     description = "microk8s-kube-controller"
@@ -90,7 +116,7 @@ resource "oci_core_security_list" "SL01" {
     }
   }
   ingress_security_rules {
-    source      = "10.0.0.0/16"
+    source      = "${var.CIDR_VCN01}"
     protocol    = "6"
     stateless   = false
     description = "microk8s-kube-scheduler"
@@ -100,7 +126,7 @@ resource "oci_core_security_list" "SL01" {
     }
   }
   ingress_security_rules {
-    source      = "10.0.0.0/16"
+    source      = "${var.CIDR_VCN01}"
     protocol    = "6"
     stateless   = false
     description = "microk8s-api-server"
@@ -110,7 +136,7 @@ resource "oci_core_security_list" "SL01" {
     }
   }
   ingress_security_rules {
-    source      = "10.0.0.0/16"
+    source      = "${var.CIDR_VCN01}"
     protocol    = "6"
     stateless   = false
     description = "microk8s-dqlite"
@@ -120,7 +146,7 @@ resource "oci_core_security_list" "SL01" {
     }
   }
   ingress_security_rules {
-    source      = "10.0.0.0/16"
+    source      = "${var.CIDR_VCN01}"
     protocol    = "6"
     stateless   = false
     description = "microk8s-cluster-agent"
@@ -130,7 +156,7 @@ resource "oci_core_security_list" "SL01" {
     }
   }
   ingress_security_rules {
-    source      = "10.0.0.0/16"
+    source      = "${var.CIDR_VCN01}"
     protocol    = "6"
     stateless   = false
     description = "nodeport(TCP)"
@@ -140,7 +166,7 @@ resource "oci_core_security_list" "SL01" {
     }
   }
   ingress_security_rules {
-    source      = "10.0.0.0/16"
+    source      = "${var.CIDR_VCN01}"
     protocol    = "17"
     stateless   = false
     description = "nodeport(UDP)"
@@ -168,8 +194,40 @@ resource "oci_core_security_list" "SL02" {
     stateless   = false
     description = "all"
   }
+  ingress_security_rules {
+    source      = var.CIDR_VCN01
+    protocol    = "all"
+    stateless   = false
+    description = "all vcn01"
+  }
+  ingress_security_rules {
+      source   = "${var.CIDR_VCN01}"
+      protocol = "6"
+      stateless   = false
+      tcp_options {
+        min = "53"
+        max = "53"
+      }
+    }
+  ingress_security_rules {
+      source   = "${var.CIDR_VCN01}"
+      protocol = "6"
+      stateless   = false
+      tcp_options {
+        min = "53"
+        max = "53"
+      }
+    }
+  ingress_security_rules {
+    source   = "${var.CIDR_VCN01}"
+    protocol = "17"
+    stateless   = false
+    udp_options {
+      min = "53"
+      max = "53"
+    }
+  }
 }
-
 
 # SL03 OPE NODE
 resource "oci_core_security_list" "SL03" {
@@ -190,6 +248,22 @@ resource "oci_core_security_list" "SL03" {
     tcp_options {
       min = "22"
       max = "22"
+    }
+  }
+  ingress_security_rules {
+      source   = "${var.CIDR_VCN01}"
+      protocol = "6"
+      tcp_options {
+        min = "53"
+        max = "53"
+      }
+    }
+  ingress_security_rules {
+    source   = "${var.CIDR_VCN01}"
+    protocol = "17"
+    udp_options {
+      min = "53"
+      max = "53"
     }
   }
 }

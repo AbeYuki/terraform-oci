@@ -16,6 +16,7 @@ export TF_VAR_FINGERPRINT=" "
 export TF_VAR_PRIVATE_KEY_INSTANCE_PATH=" "
 export TF_VAR_SSH_PUBLIC_KEY_PATH=" "
 export TF_VAR_API_KEY_PATH=" "
+export TF_VAR_MY_GLOBAL_IP=" "
 EOF
 ```
 

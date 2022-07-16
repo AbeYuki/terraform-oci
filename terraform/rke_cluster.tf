@@ -31,6 +31,12 @@ resource "rke_cluster" "cluster" {
   network {
     plugin = "flannel"
   }
+  ingress {
+    provider = "none"
+  }
+  monitoring {
+    provider = "none"
+  }
 }
 resource "local_file" "kube_cluster_yaml" {
   filename = "${path.root}/kube_config_cluster.yml"

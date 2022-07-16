@@ -1,6 +1,9 @@
 # terraform-oci-rke
 Build rke cluster with terraform on oci
 
+## Always Free 
+This terraform builds with Always Free only.
+
 ## terraform ディレクトリへ移動
 ```
 cd terraform/

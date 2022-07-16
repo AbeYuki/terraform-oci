@@ -10,6 +10,46 @@ resource "oci_core_security_list" "SL01" {
     description = "all"
   }
   ingress_security_rules {
+    source      = "0.0.0.0/0"
+    protocol    = "6"
+    stateless   = false
+    description = "http"
+    tcp_options {
+      min = "80"
+      max = "80"
+    }
+  }
+  ingress_security_rules {
+    source      = "0.0.0.0/0"
+    protocol    = "6"
+    stateless   = false
+    description = "https"
+    tcp_options {
+      min = "443"
+      max = "443"
+    }
+  }
+  ingress_security_rules {
+    source      = var.CIDR_VCN01
+    protocol    = "6"
+    stateless   = false
+    description = "http"
+    tcp_options {
+      min = "80"
+      max = "80"
+    }
+  }
+  ingress_security_rules {
+    source      = var.CIDR_VCN01
+    protocol    = "6"
+    stateless   = false
+    description = "https"
+    tcp_options {
+      min = "443"
+      max = "443"
+    }
+  }
+  ingress_security_rules {
     source      = "${var.MY_GLOBAL_IP}/32"
     protocol    = "6"
     stateless   = false

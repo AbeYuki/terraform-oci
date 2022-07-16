@@ -1,5 +1,6 @@
 resource "rke_cluster" "cluster" {
   cluster_name          = "oci-rke-cluster"
+  kubernetes_version    = "v1.22.4-rancher1-1"
   disable_port_check    = false
   ignore_docker_version = false
   delay_on_creation     = 10
@@ -25,17 +26,26 @@ resource "rke_cluster" "cluster" {
     ssh_key          = file(var.PRIVATE_KEY_INSTANCE_PATH)
     role             = ["worker"]
   }
-  authorization {
-    mode = "rbac"
-  }
   network {
     plugin = "flannel"
+  }
+  authorization {
+    mode = "rbac"
   }
   ingress {
     provider = "none"
   }
   monitoring {
     provider = "none"
+  }
+  restore {
+    restore       = true
+    snapshot_name = "backup.db"
+  }
+  upgrade_strategy {
+    drain                        = true
+    max_unavailable_worker       = "20%"
+    max_unavailable_controlplane = "1"
   }
 }
 resource "local_file" "kube_cluster_yaml" {

@@ -1,6 +1,8 @@
 # terraform-oci
 Build microk8s with terraform on oci
 
+## Always Free 
+This terraform builds with Always Free only.
 
 ## terraform ディレクトリへ移動
 ```

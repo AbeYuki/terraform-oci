@@ -1,5 +1,5 @@
 # terraform-oci
-Build OCI with terraform
+Build microk8s with terraform on oci
 
 
 ## terraform ディレクトリへ移動

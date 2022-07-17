@@ -124,12 +124,20 @@ resource "oci_core_instance" "BASTION" {
   }
 }
 
-output "public_ips" {
-  value       = oci_core_instance.BASTION.*.public_ip
-  description = "Public IPs of instances"
+output "private_ips" {
+  value       = [
+    oci_core_instance.BASTION.*.private_ip,
+    oci_core_instance.MASTER.*.private_ip,
+    oci_core_instance.NODE.*.private_ip
+  ]
+  description = "Private IPs of instances"
 }
 
-output "private_ips" {
-  value       = oci_core_instance.BASTION.*.private_ip
-  description = "Private IPs of instances"
+output "public_ips" {
+  value       = [
+    oci_core_instance.BASTION.*.public_ip,
+    oci_core_instance.MASTER.*.public_ip,
+    oci_core_instance.NODE.*.public_ip
+  ]
+  description = "Public IPs of instances"
 }

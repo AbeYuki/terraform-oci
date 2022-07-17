@@ -6,7 +6,7 @@ data "template_file" "CLOUD_CONFIG_NODE" {
   template = <<YAML
 #cloud-config
 timezone: Asia/Tokyo
-locale: ja_JP.utf8
+locale: en_US.utf8
 runcmd:
 - apt-get update
 - apt-get install -y dnsutils jq
@@ -22,7 +22,7 @@ data "template_file" "CLOUD_CONFIG_BASTION" {
   template = <<YAML
 #cloud-config
 timezone: Asia/Tokyo
-locale: ja_JP.utf8
+locale: en_US.utf8
 runcmd:
 - apt-get update
 - apt-get install -y dnsutils jq

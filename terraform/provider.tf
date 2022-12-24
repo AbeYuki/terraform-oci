@@ -2,7 +2,7 @@ terraform {
   required_providers {
     oci = {
       source  = "oracle/oci"
-      version = "4.83.0"
+      version = "4.102.0"
     }
     rke = {
       source  = "rancher/rke"

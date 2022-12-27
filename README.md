@@ -1,11 +1,22 @@
 # terraform-oci-rke
 Build rke cluster with terraform on oci
 
+## Tfstate management
+Stores the state in a Kubernetes secret.
+```
+terraform {
+  backend "kubernetes" {
+    secret_suffix    = "state"
+    config_path      = "~/.kube/config"
+  }
+}
+```
+
 ## Always Free 
 This terraform builds with Always Free only.
 
 ## terraform ディレクトリへ移動
-```
+```bash
 cd terraform/
 ```
 ## 値を入力し環境変数を設定する
@@ -32,7 +43,7 @@ terraform init
 terraform plan
 ```
 
-## planの内容を実行
+## plan 内容を実行
 ```bash
 terraform apply
 ```

@@ -25,7 +25,7 @@ timezone: Asia/Tokyo
 locale: en_US.utf8
 runcmd:
 - apt-get update
-- apt-get install -y dnsutils jq
+- apt-get install -y dnsutils jq unzip
 - sysctl -w net.ipv4.ip_forward=1
 - sed -i -e "s/^#net.ipv4.ip_forward=1/net.ipv4.ip_forward=1/g" /etc/sysctl.conf
 - iptables -F

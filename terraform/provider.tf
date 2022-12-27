@@ -1,4 +1,10 @@
 terraform {
+  backend "kubernetes" {
+    secret_suffix  = "oci-rke"
+    config_path    = "~/.kube/config_microk8s_node2"
+    namespace      = "terraform"
+    config_context = "microk8s-node2"
+  }
   required_providers {
     oci = {
       source  = "oracle/oci"
@@ -6,7 +12,7 @@ terraform {
     }
     rke = {
       source  = "rancher/rke"
-      version = "1.3.1"
+      version = "1.3.4"
     }
   }
 }
@@ -18,5 +24,6 @@ provider "oci" {
   region           = var.REGION
 }
 provider "rke" {
-  debug = true
+  debug    = true
+  log_file = "rke_debug.log"
 }

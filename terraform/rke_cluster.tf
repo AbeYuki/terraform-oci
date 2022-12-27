@@ -1,36 +1,34 @@
 resource "rke_cluster" "cluster" {
   cluster_name          = "oci-rke-cluster"
-  kubernetes_version    = "v1.22.4-rancher1-1"
-  disable_port_check    = false
-  ignore_docker_version = false
-  delay_on_creation     = 10
-  addon_job_timeout     = 30
+  kubernetes_version    = "v1.23.10-rancher1-1"
+  enable_cri_dockerd    = true
+  ignore_docker_version = true
+  disable_port_check    = true
+  delay_on_creation     = 120
+  addon_job_timeout     = 60
   nodes {
-    address          = oci_core_instance.MASTER.0.public_ip
-    internal_address = oci_core_instance.MASTER.0.private_ip
-    user             = "ubuntu"
-    ssh_key          = file(var.PRIVATE_KEY_INSTANCE_PATH)
-    role             = ["controlplane", "worker", "etcd"]
+    address           = oci_core_instance.MASTER.0.public_ip
+    internal_address  = oci_core_instance.MASTER.0.private_ip
+    user              = "ubuntu"
+    ssh_key           = file(var.PRIVATE_KEY_INSTANCE_PATH)
+    role              = ["controlplane", "worker", "etcd"]
   }
   nodes {
-    address          = oci_core_instance.NODE.0.public_ip
-    internal_address = oci_core_instance.NODE.0.private_ip
-    user             = "ubuntu"
-    ssh_key          = file(var.PRIVATE_KEY_INSTANCE_PATH)
-    role             = ["worker", "etcd"]
+    address           = oci_core_instance.NODE.0.public_ip
+    internal_address  = oci_core_instance.NODE.0.private_ip
+    user              = "ubuntu"
+    ssh_key           = file(var.PRIVATE_KEY_INSTANCE_PATH)
+    role              = ["worker", "etcd"]
   }
   nodes {
-    address          = oci_core_instance.NODE.1.public_ip
-    internal_address = oci_core_instance.NODE.1.private_ip
-    user             = "ubuntu"
-    ssh_key          = file(var.PRIVATE_KEY_INSTANCE_PATH)
-    role             = ["worker", "etcd"]
+    address           = oci_core_instance.NODE.1.public_ip
+    internal_address  = oci_core_instance.NODE.1.private_ip
+    user              = "ubuntu"
+    ssh_key           = file(var.PRIVATE_KEY_INSTANCE_PATH)
+    role              = ["worker", "etcd"]
   }
   network {
     plugin = "flannel"
-  }
-  authorization {
-    mode = "rbac"
   }
   ingress {
     provider = "none"

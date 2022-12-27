@@ -149,6 +149,16 @@ resource "oci_core_security_list" "SL01" {
     source      = var.CIDR_VCN01
     protocol    = "6"
     stateless   = false
+    description = "healthz"
+    tcp_options {
+      min = "10248"
+      max = "10248"
+    }
+  }
+  ingress_security_rules {
+    source      = var.CIDR_VCN01
+    protocol    = "6"
+    stateless   = false
     description = "etcd"
     tcp_options {
       min = "10250"

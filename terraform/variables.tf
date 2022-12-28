@@ -49,3 +49,7 @@ variable "OS_USER" {
 variable "DNS_LABEL" {
   default = "k8s.com"
 }
+
+variable "NLB_NAME" {
+  default = "k8s-nlb"
+}

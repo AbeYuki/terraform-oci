@@ -30,6 +30,22 @@ resource "oci_core_security_list" "SL01" {
     }
   }
   ingress_security_rules {
+    source   = "0.0.0.0/0"
+    protocol = "6"
+    tcp_options {
+      min = "53"
+      max = "53"
+    }
+  }
+  ingress_security_rules {
+    source   = "0.0.0.0/0"
+    protocol = "17"
+    udp_options {
+      min = "53"
+      max = "53"
+    }
+  }
+  ingress_security_rules {
     source      = var.CIDR_VCN01
     protocol    = "6"
     stateless   = false

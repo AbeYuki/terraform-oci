@@ -1,6 +1,6 @@
 resource "rke_cluster" "cluster" {
   cluster_name          = "oci-rke-cluster"
-  kubernetes_version    = "v1.23.10-rancher1-1"
+  kubernetes_version    = "v1.24.4-rancher1-1"
   enable_cri_dockerd    = true
   ignore_docker_version = true
   disable_port_check    = true
@@ -12,6 +12,8 @@ resource "rke_cluster" "cluster" {
     user              = "ubuntu"
     ssh_key           = file(var.PRIVATE_KEY_INSTANCE_PATH)
     role              = ["controlplane", "worker", "etcd"]
+    node_name         = oci_core_instance.MASTER.0.display_name
+    hostname_override = oci_core_instance.MASTER.0.display_name
   }
   nodes {
     address           = oci_core_instance.NODE.0.public_ip
@@ -19,6 +21,8 @@ resource "rke_cluster" "cluster" {
     user              = "ubuntu"
     ssh_key           = file(var.PRIVATE_KEY_INSTANCE_PATH)
     role              = ["worker", "etcd"]
+    node_name         = oci_core_instance.NODE.0.display_name
+    hostname_override = oci_core_instance.NODE.0.display_name
   }
   nodes {
     address           = oci_core_instance.NODE.1.public_ip
@@ -26,6 +30,8 @@ resource "rke_cluster" "cluster" {
     user              = "ubuntu"
     ssh_key           = file(var.PRIVATE_KEY_INSTANCE_PATH)
     role              = ["worker", "etcd"]
+    node_name         = oci_core_instance.NODE.1.display_name
+    hostname_override = oci_core_instance.NODE.1.display_name
   }
   network {
     plugin = "flannel"

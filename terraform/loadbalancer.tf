@@ -19,7 +19,7 @@ resource oci_network_load_balancer_backend_set EXTERNAL_NLB_BACKENDSET {
   }
   ip_version               = "IPV4"
   is_preserve_source       = "true"
-  name                     = "external_nlb_backendset"
+  name                     = "external-nlb-backendset"
   network_load_balancer_id = oci_network_load_balancer_network_load_balancer.EXTERNAL_NLB.id
   policy                   = "FIVE_TUPLE"
 }
@@ -27,11 +27,7 @@ resource oci_network_load_balancer_backend_set EXTERNAL_NLB_BACKENDSET {
 resource oci_network_load_balancer_backend MASTER1 {
   backend_set_name         = oci_network_load_balancer_backend_set.EXTERNAL_NLB_BACKENDSET.name
   ip_address               = oci_core_instance.MASTER[0].private_ip
-  is_backup                = "false"
-  is_drain                 = "false"
-  is_offline               = "false"
   network_load_balancer_id = oci_network_load_balancer_network_load_balancer.EXTERNAL_NLB.id
-  name                     = oci_core_instance.MASTER[0].display_name
   port                     = "0"
   weight                   = "1"
 }
@@ -39,11 +35,7 @@ resource oci_network_load_balancer_backend MASTER1 {
 resource oci_network_load_balancer_backend NODE1 {
   backend_set_name         = oci_network_load_balancer_backend_set.EXTERNAL_NLB_BACKENDSET.name
   ip_address               = oci_core_instance.NODE[0].private_ip
-  is_backup                = "false"
-  is_drain                 = "false"
-  is_offline               = "false"
   network_load_balancer_id = oci_network_load_balancer_network_load_balancer.EXTERNAL_NLB.id
-  name                     = oci_core_instance.NODE[0].display_name
   port                     = "0"
   weight                   = "1"
 }
@@ -51,11 +43,7 @@ resource oci_network_load_balancer_backend NODE1 {
 resource oci_network_load_balancer_backend NODE2 {
   backend_set_name         = oci_network_load_balancer_backend_set.EXTERNAL_NLB_BACKENDSET.name
   ip_address               = oci_core_instance.NODE[1].private_ip
-  is_backup                = "false"
-  is_drain                 = "false"
-  is_offline               = "false"
   network_load_balancer_id = oci_network_load_balancer_network_load_balancer.EXTERNAL_NLB.id
-  name                     = oci_core_instance.NODE[1].display_name
   port                     = "0"
   weight                   = "1"
 }
@@ -64,7 +52,7 @@ resource oci_network_load_balancer_backend NODE2 {
 resource oci_network_load_balancer_listener EXTERNAL_NLB_LITSNER {
   default_backend_set_name = oci_network_load_balancer_backend_set.EXTERNAL_NLB_BACKENDSET.name
   ip_version               = "IPV4"
-  name                     = "listener_k8s"
+  name                     = "listener-k8s"
   network_load_balancer_id = oci_network_load_balancer_network_load_balancer.EXTERNAL_NLB.id
   port                     = "0"
   protocol                 = "TCP"

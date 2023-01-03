@@ -6,13 +6,6 @@ resource "oci_core_virtual_network" "VCN01" {
   display_name   = "vcn01"
   dns_label      = "vcn01"
 }
-## Operation node
-resource "oci_core_virtual_network" "VCN02" {
-  cidr_block     = var.CIDR_VCN02
-  compartment_id = var.COMPARTMENT_OCID
-  display_name   = "vcn02"
-  dns_label      = "vcn02"
-}
 
 # subnet
 ## public
@@ -40,18 +33,6 @@ resource "oci_core_subnet" "SUBNET02" {
   prohibit_public_ip_on_vnic = true
 }
 
-## public
-resource "oci_core_subnet" "SUBNET03" {
-  availability_domain = lookup(data.oci_identity_availability_domains.ADS.availability_domains[0], "name")
-  cidr_block          = var.CIDR_SUBNET03
-  display_name        = "subnet03"
-  dns_label           = "public"
-  security_list_ids   = [oci_core_security_list.SL03.id]
-  compartment_id      = var.COMPARTMENT_OCID
-  vcn_id              = oci_core_virtual_network.VCN02.id
-  route_table_id      = oci_core_route_table.RT03.id
-}
-
 # gatway
 ## internet-gateway
 resource "oci_core_internet_gateway" "IG01" {
@@ -59,11 +40,7 @@ resource "oci_core_internet_gateway" "IG01" {
   display_name   = "ig01"
   vcn_id         = oci_core_virtual_network.VCN01.id
 }
-resource "oci_core_internet_gateway" "IG02" {
-  compartment_id = var.COMPARTMENT_OCID
-  display_name   = "ig02"
-  vcn_id         = oci_core_virtual_network.VCN02.id
-}
+
 ## nat-gateway
 resource "oci_core_nat_gateway" "NG01" {
   display_name   = "ng01"
@@ -101,16 +78,3 @@ resource "oci_core_route_table" "RT02" {
     network_entity_id = oci_core_nat_gateway.NG01.id
   }
 }
-## public
-resource "oci_core_route_table" "RT03" {
-  compartment_id = var.COMPARTMENT_OCID
-  vcn_id         = oci_core_virtual_network.VCN02.id
-  display_name   = "rt03"
-  route_rules {
-    destination       = "0.0.0.0/0"
-    network_entity_id = oci_core_internet_gateway.IG02.id
-  }
-}
-
-
-

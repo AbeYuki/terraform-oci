@@ -3,7 +3,3 @@
 terraform.tfstate
 *terraform.tfstate.*
 .env
-kube_config_cluster.yml
-cluster.yml
-cluster.rkestate
-*.log

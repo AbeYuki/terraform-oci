@@ -21,23 +21,23 @@ resource "oci_core_instance" "NODE" {
   }
   metadata = {
     ssh_authorized_keys = "${file(var.SSH_PUBLIC_KEY_PATH)}"
-    user_data           = "${base64encode(data.template_file.CLOUD_CONFIG_NODE.rendered)}"
+    user_data           = "${base64encode(data.template_file.CLOUD_CONFIG.rendered)}"
   }
   timeouts {
     create = "60m"
   }
-  provisioner "remote-exec" {
-    connection {
-      type        = "ssh"
-      user        = var.OS_USER
-      host        = self.public_ip
-      private_key = file(var.PRIVATE_KEY_INSTANCE_PATH)
-      timeout     = "5m"
+    provisioner "remote-exec" {
+      connection {
+        type        = "ssh"
+        user        = var.OS_USER
+        host        = self.public_ip
+        private_key = file(var.PRIVATE_KEY_INSTANCE_PATH)
+        timeout     = "5m"
+      }
+      scripts = [
+        "provisioning/provisioning-k8s.sh",
+      ]
     }
-    scripts = [
-      "provisioning/provisioning.sh",
-    ]
-  }
 }
 resource "oci_core_instance" "MASTER" {
   count               = 1
@@ -62,23 +62,23 @@ resource "oci_core_instance" "MASTER" {
   }
   metadata = {
     ssh_authorized_keys = "${file(var.SSH_PUBLIC_KEY_PATH)}"
-    user_data           = "${base64encode(data.template_file.CLOUD_CONFIG_NODE.rendered)}"
+    user_data           = "${base64encode(data.template_file.CLOUD_CONFIG.rendered)}"
   }
   timeouts {
     create = "60m"
   }
-  provisioner "remote-exec" {
-    connection {
-      type        = "ssh"
-      user        = var.OS_USER
-      host        = self.public_ip
-      private_key = file(var.PRIVATE_KEY_INSTANCE_PATH)
-      timeout     = "5m"
+    provisioner "remote-exec" {
+      connection {
+        type        = "ssh"
+        user        = var.OS_USER
+        host        = self.public_ip
+        private_key = file(var.PRIVATE_KEY_INSTANCE_PATH)
+        timeout     = "5m"
+      }
+      scripts = [
+        "provisioning/provisioning-k8s.sh",
+      ]
     }
-    scripts = [
-      "provisioning/provisioning.sh",
-    ]
-  }
 }
 
 resource "oci_core_instance" "BASTION" {
@@ -104,8 +104,7 @@ resource "oci_core_instance" "BASTION" {
   }
   metadata = {
     ssh_authorized_keys = "${file(var.SSH_PUBLIC_KEY_PATH)}"
-    private_key         = "${file(var.PRIVATE_KEY_INSTANCE_PATH)}"
-    user_data           = "${base64encode(data.template_file.CLOUD_CONFIG_BASTION.rendered)}"
+    user_data           = "${base64encode(data.template_file.CLOUD_CONFIG.rendered)}"
   }
   timeouts {
     create = "60m"
@@ -119,25 +118,17 @@ resource "oci_core_instance" "BASTION" {
       timeout     = "5m"
     }
     scripts = [
-      "provisioning/install.sh",
+      "provisioning/provisioning.sh",
     ]
   }
 }
 
-output "private_ips" {
-  value = [
-    oci_core_instance.BASTION.*.private_ip,
-    oci_core_instance.MASTER.*.private_ip,
-    oci_core_instance.NODE.*.private_ip
-  ]
-  description = "Private IPs of instances"
-}
-
-output "public_ips" {
-  value = [
-    oci_core_instance.BASTION.*.public_ip,
-    oci_core_instance.MASTER.*.public_ip,
-    oci_core_instance.NODE.*.public_ip
-  ]
-  description = "Public IPs of instances"
-}
+#output "public_ips" {
+#  value       = oci_core_instance.NODE.*.public_ip
+#  description = "Public IPs of instances"
+#}
+#
+#output "private_ips" {
+#  value       = oci_core_instance.NODE.*.private_ip
+#  description = "Private IPs of instances"
+#}

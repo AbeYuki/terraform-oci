@@ -4,9 +4,6 @@ terraform {
     region = "ap-northeast-1"
     key = "oci-rke.tfstate"
     encrypt = true
-    tags = {
-      Date = "202305"
-    }
   }
   required_providers {
     oci = {

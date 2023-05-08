@@ -152,6 +152,16 @@ resource "oci_core_security_list" "SL01" {
     }
   }
   ingress_security_rules {
+    source      = "${var.MY_GLOBAL_IP}/32"
+    protocol    = "17"
+    stateless   = false
+    description = "minecraft-server-udp"
+    udp_options {
+      min = "19132"
+      max = "19132"
+    }
+  }
+  ingress_security_rules {
     source      = var.CIDR_VCN01
     protocol    = "6"
     stateless   = false
@@ -276,16 +286,6 @@ resource "oci_core_security_list" "SL01" {
     protocol    = "all"
     stateless   = false
     description = "all vcn01"
-  }
-  ingress_security_rules {
-    source      = "${var.MY_GLOBAL_IP}/32"
-    protocol    = "6"
-    stateless   = false
-    description = "minecraft-server-tcp"
-    tcp_options {
-      min = "19132"
-      max = "19132"
-    }
   }
 }
 

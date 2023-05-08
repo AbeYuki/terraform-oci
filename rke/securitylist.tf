@@ -277,6 +277,16 @@ resource "oci_core_security_list" "SL01" {
     stateless   = false
     description = "all vcn01"
   }
+  ingress_security_rules {
+    source      = "${var.MY_GLOBAL_IP}/32"
+    protocol    = "6"
+    stateless   = false
+    description = "minecraft-server-tcp"
+    tcp_options {
+      min = "19132"
+      max = "19132"
+    }
+  }
 }
 
 # SL02 NFS NODE

@@ -152,7 +152,7 @@ resource "oci_core_security_list" "SL01" {
     }
   }
   ingress_security_rules {
-    source      = "${var.MY_GLOBAL_IP}/32"
+    source      = "0.0.0.0/0"
     protocol    = "17"
     stateless   = false
     description = "minecraft-server-udp"

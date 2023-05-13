@@ -1,8 +1,8 @@
 terraform {
   backend "s3" {
-    bucket = "aimhighergg-tfstate"
-    region = "ap-northeast-1"
-    key = "oci-rke.tfstate"
+    bucket  = "aimhighergg-tfstate"
+    region  = "ap-northeast-1"
+    key     = "oci-rke.tfstate"
     encrypt = true
   }
   required_providers {

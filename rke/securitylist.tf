@@ -157,8 +157,8 @@ resource "oci_core_security_list" "SL01" {
     stateless   = false
     description = "minecraft-server-udp"
     udp_options {
-      min = "19132"
-      max = "19132"
+      min = "32767"
+      max = "32767"
     }
   }
   ingress_security_rules {

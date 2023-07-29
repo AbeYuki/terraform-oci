@@ -1,6 +1,6 @@
 resource "rke_cluster" "cluster" {
   cluster_name          = "oci-rke-cluster"
-  kubernetes_version    = "v1.24.4-rancher1-1"
+  kubernetes_version    = "v1.26.4-rancher2-1"
   enable_cri_dockerd    = true
   ignore_docker_version = true
   disable_port_check    = true
@@ -32,6 +32,14 @@ resource "rke_cluster" "cluster" {
     role              = ["worker", "etcd"]
     node_name         = oci_core_instance.NODE.1.display_name
     hostname_override = oci_core_instance.NODE.1.display_name
+  }
+  services {
+    kube_controller {
+      extra_args = {
+        "cluster-signing-cert-file" = "/etc/kubernetes/ssl/kube-ca.pem"
+        "cluster-signing-key-file"  = "/etc/kubernetes/ssl/kube-ca-key.pem"
+      }
+    }
   }
   network {
     plugin = "flannel"

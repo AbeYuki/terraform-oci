@@ -1,6 +1,6 @@
 resource "rke_cluster" "cluster" {
   cluster_name          = "oci-rke-cluster"
-  kubernetes_version    = "v1.26.4-rancher2-1"
+  kubernetes_version    = "v1.27.11-rancher1-1"
   enable_cri_dockerd    = true
   ignore_docker_version = true
   disable_port_check    = true

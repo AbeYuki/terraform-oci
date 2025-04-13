@@ -47,3 +47,12 @@ terraform plan
 ```bash
 terraform apply
 ```
+
+# RKE Cluster のみ削除と作成
+
+```
+terraform destroy -target=rke_cluster.cluster
+```
+```
+terraform apply
+```

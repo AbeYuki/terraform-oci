@@ -272,6 +272,15 @@ resource "oci_core_security_list" "SL01" {
     }
   }
   ingress_security_rules {
+  source      = "10.0.0.0/8"
+  protocol    = "6"
+  description = "Allow NLB health check to NodePort"
+  tcp_options {
+    min = 30000
+    max = 32767
+  }
+}
+  ingress_security_rules {
     source      = var.CIDR_VCN01
     protocol    = "17"
     stateless   = false
